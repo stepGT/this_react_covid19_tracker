@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Button from 'react-bootstrap/Button';
 import "./App.css";
 
 // https://corona.lmao.ninja/docs/
@@ -11,6 +12,7 @@ function App() {
       .then((res) => res.json())
       .then((res) => setAllData(res));
   });
+  return <Button>Button</Button>;
 }
 
 export default App;
