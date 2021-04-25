@@ -1,31 +1,16 @@
-import { Component } from "react";
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
 // https://corona.lmao.ninja/docs/
 const APICovid19 = "https://disease.sh/v3/covid-19/all";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: {},
-    };
-  }
-
-  componentDidMount() {
+function App() {
+  const [allData, setAllData] = useState()
+  useEffect(() => {
     fetch(APICovid19)
       .then((res) => res.json())
-      .then((res) => this.setState({ ...this.state, data: res }));
-  }
-
-  render() {
-    return (
-      <ul>
-        {Object.keys(this.state.data).forEach(val => {
-            console.log(val)
-          })}
-      </ul>
-    );
-  }
+      .then((res) => setAllData(res));
+  });
 }
 
 export default App;
