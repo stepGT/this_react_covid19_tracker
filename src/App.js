@@ -13,16 +13,15 @@ import "./App.css";
 const APICovid19All = "https://disease.sh/v3/covid-19/all";
 
 function App() {
-  const [allData, setAllData] = useState([]);
+  // Default updated new Date().getTime() - 1619467607934
+  const [allData, setAllData] = useState({ updated: new Date().getTime() });
+  let result = formatDistanceToNow(new Date(allData.updated), {
+    addSuffix: true,
+  });
+
   useEffect(() => {
     axios(APICovid19All).then((res) => setAllData(res.data));
   }, []);
-
-  if (allData.updated) {
-    var result = formatDistanceToNow(new Date(parseInt(allData.updated)), {
-      addSuffix: true,
-    });
-  }
 
   return (
     <Container fluid>
