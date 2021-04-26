@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import CardDeck from "react-bootstrap/CardDeck";
-import Card from "react-bootstrap/Card";
+import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -15,52 +14,40 @@ const APICovid19All = "https://disease.sh/v3/covid-19/all";
 function App() {
   // Default updated new Date().getTime() - 1619467607934
   const [allData, setAllData] = useState({ updated: new Date().getTime() });
-  let result = formatDistanceToNow(new Date(allData.updated), {
-    addSuffix: true,
-  });
 
   useEffect(() => {
     axios(APICovid19All).then((res) => setAllData(res.data));
   }, []);
 
+  let allDataKeys = Object.keys(allData).sort();
+
   return (
     <Container fluid>
       <Row>
         <Col>
-          <CardDeck>
-            <Card text="white" bg="warning" className="text-center">
-              <Card.Img variant="top" src="holder.js/100px160" />
-              <Card.Body>
-                <Card.Title>Cases</Card.Title>
-                <Card.Text>{allData.cases}</Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <small className="text-light">Last updated {result}</small>
-              </Card.Footer>
-            </Card>
-
-            <Card text="white" bg="danger" className="text-center">
-              <Card.Img variant="top" src="holder.js/100px160" />
-              <Card.Body>
-                <Card.Title>Deaths</Card.Title>
-                <Card.Text>{allData.deaths}</Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <small className="text-light">Last updated {result}</small>
-              </Card.Footer>
-            </Card>
-
-            <Card text="white" bg="success" className="text-center">
-              <Card.Img variant="top" src="holder.js/100px160" />
-              <Card.Body>
-                <Card.Title>Recovered</Card.Title>
-                <Card.Text>{allData.recovered}</Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <small className="text-light">Last updated {result}</small>
-              </Card.Footer>
-            </Card>
-          </CardDeck>
+          <Table responsive striped bordered hover>
+            <thead>
+              <tr>
+                {allDataKeys &&
+                  allDataKeys.map((el, i) => {
+                    return <th key={i}>{el}</th>;
+                  })}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {allDataKeys &&
+                  allDataKeys.map((el, i) => {
+                    if (el === "updated") {
+                      var qwerty = formatDistanceToNow(new Date(allData[el]), {
+                        addSuffix: true,
+                      });
+                    }
+                    return <td key={i}>{qwerty ? qwerty : allData[el]}</td>;
+                  })}
+              </tr>
+            </tbody>
+          </Table>
         </Col>
       </Row>
     </Container>
