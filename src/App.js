@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import CardDeck from "react-bootstrap/CardDeck";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
@@ -13,9 +14,7 @@ const APICovid19All = "https://disease.sh/v3/covid-19/all";
 function App() {
   const [allData, setAllData] = useState([]);
   useEffect(() => {
-    fetch(APICovid19All)
-      .then((res) => res.json())
-      .then((res) => setAllData(res));
+    axios(APICovid19All).then((res) => setAllData(res.data));
   }, []);
   return (
     <Container fluid>
