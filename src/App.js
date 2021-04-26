@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import CardDeck from "react-bootstrap/CardDeck";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
@@ -16,6 +17,13 @@ function App() {
   useEffect(() => {
     axios(APICovid19All).then((res) => setAllData(res.data));
   }, []);
+
+  if (allData.updated) {
+    var result = formatDistanceToNow(new Date(parseInt(allData.updated)), {
+      addSuffix: true,
+    });
+  }
+
   return (
     <Container fluid>
       <Row>
@@ -28,7 +36,7 @@ function App() {
                 <Card.Text>{allData.cases}</Card.Text>
               </Card.Body>
               <Card.Footer>
-                <small className="text-light">Last updated 3 mins ago</small>
+                <small className="text-light">Last updated {result}</small>
               </Card.Footer>
             </Card>
 
@@ -39,7 +47,7 @@ function App() {
                 <Card.Text>{allData.deaths}</Card.Text>
               </Card.Body>
               <Card.Footer>
-                <small className="text-light">Last updated 3 mins ago</small>
+                <small className="text-light">Last updated {result}</small>
               </Card.Footer>
             </Card>
 
@@ -50,7 +58,7 @@ function App() {
                 <Card.Text>{allData.recovered}</Card.Text>
               </Card.Body>
               <Card.Footer>
-                <small className="text-light">Last updated 3 mins ago</small>
+                <small className="text-light">Last updated {result}</small>
               </Card.Footer>
             </Card>
           </CardDeck>
