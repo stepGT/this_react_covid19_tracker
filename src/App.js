@@ -28,24 +28,24 @@ function App() {
           <Table responsive striped bordered hover>
             <thead>
               <tr>
-                {allDataKeys &&
-                  allDataKeys.map((el, i) => {
-                    return <th key={i}>{el}</th>;
-                  })}
+                <th>Worldometers</th>
+                <th>Value</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                {allDataKeys &&
-                  allDataKeys.map((el, i) => {
-                    if (el === "updated") {
-                      var qwerty = formatDistanceToNow(new Date(allData[el]), {
-                        addSuffix: true,
-                      });
-                    }
-                    return <td key={i}>{qwerty ? qwerty : allData[el]}</td>;
-                  })}
-              </tr>
+              { allDataKeys.map((el, i) => {
+                  if (el === "updated") {
+                    var qwerty = formatDistanceToNow(new Date(allData[el]), {
+                      addSuffix: true,
+                    });
+                  }
+                  return (
+                    <tr key={i}>
+                      <td>{el}</td>
+                      <td>{qwerty ? qwerty : allData[el]}</td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </Table>
         </Col>
