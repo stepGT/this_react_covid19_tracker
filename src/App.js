@@ -11,12 +11,12 @@ import "./App.css";
 const APICovid19All = "https://disease.sh/v3/covid-19/all";
 
 function App() {
-  const [allData, setAllData] = useState();
+  const [allData, setAllData] = useState([]);
   useEffect(() => {
     fetch(APICovid19All)
       .then((res) => res.json())
       .then((res) => setAllData(res));
-  });
+  }, []);
   return (
     <Container fluid>
       <Row>
