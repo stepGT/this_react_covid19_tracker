@@ -18,7 +18,7 @@ const APICovid19Countries = "https://disease.sh/v3/covid-19/countries";
 
 function App() {
   // Default updated new Date().getTime() - 1619467607934
-  const [allData, setAllData] = useState({ updated: new Date().getTime() });
+  const [allData, setAllData] = useState({});
   const [countriesData, setCountriesData] = useState([]);
 
   useEffect(() => {
