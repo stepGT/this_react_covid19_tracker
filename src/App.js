@@ -42,9 +42,10 @@ function App() {
             <Form.Group controlId="exampleForm.ControlSelect1">
               <Form.Label>Choose country</Form.Label>
               <Form.Control as="select">
-                {countriesData.map((el, i) => (
-                  <option key={i}>{el.country}</option>
-                ))}
+                {countriesData.map((el) => {
+                  let country = el.countryInfo._id ? <option key={el.countryInfo._id}>{el.country}</option> : null
+                  return country
+                })}
               </Form.Control>
             </Form.Group>
           </Form>
