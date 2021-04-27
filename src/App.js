@@ -9,14 +9,26 @@ import "holderjs";
 import "./App.css";
 
 // Get global COVID-19 totals for today, yesterday and two days ago
+// data/disease.sh_v3_covid-19_all.json
 const APICovid19All = "https://disease.sh/v3/covid-19/all";
+
+// Get COVID-19 totals for all countries
+// data/disease.sh_v3_covid-19_countries.json
+const APICovid19Countries = "https://disease.sh/v3/covid-19/countries";
 
 function App() {
   // Default updated new Date().getTime() - 1619467607934
   const [allData, setAllData] = useState({ updated: new Date().getTime() });
+  const [countriesData, setCountriesData] = useState([]);
 
   useEffect(() => {
-    axios(APICovid19All).then((res) => setAllData(res.data));
+    axios.all([
+      axios.get(APICovid19All),
+      axios.get(APICovid19Countries)
+    ]).then((res) => {
+      setAllData(res[0].data);
+      setCountriesData(res[1].data);
+    });
   }, []);
 
   let allDataKeys = Object.keys(allData).sort();
