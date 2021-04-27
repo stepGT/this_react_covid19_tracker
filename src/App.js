@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -35,6 +36,20 @@ function App() {
 
   return (
     <Container fluid>
+      <Row>
+        <Col>
+          <Form>
+            <Form.Group controlId="exampleForm.ControlSelect1">
+              <Form.Label>Choose country</Form.Label>
+              <Form.Control as="select">
+                {countriesData.map((el, i) => (
+                  <option key={i}>{el.country}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </Col>
+      </Row>
       <Row>
         <Col>
           <Table responsive striped bordered hover>
