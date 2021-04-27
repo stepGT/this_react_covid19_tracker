@@ -3,36 +3,27 @@ import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
+import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "holderjs";
 import "./App.css";
-
-// Get global COVID-19 totals for today, yesterday and two days ago
-// data/disease.sh_v3_covid-19_all.json
-const APICovid19All = "https://disease.sh/v3/covid-19/all";
 
 // Get COVID-19 totals for all countries
 // data/disease.sh_v3_covid-19_countries.json
 const APICovid19Countries = "https://disease.sh/v3/covid-19/countries";
 
 function App() {
-  // Default updated new Date().getTime() - 1619467607934
-  const [allData, setAllData] = useState({});
   const [countriesData, setCountriesData] = useState([]);
+  const [activeCountry, setActiveCountry] = useState([]);
 
   useEffect(() => {
-    axios.all([
-      axios.get(APICovid19All),
-      axios.get(APICovid19Countries)
-    ]).then((res) => {
-      setAllData(res[0].data);
-      setCountriesData(res[1].data);
-    });
+    axios.get(APICovid19Countries).then(res => setCountriesData(res.data));
   }, []);
 
-  let allDataKeys = Object.keys(allData).sort();
+  const handleChange = e => {
+    setActiveCountry(countriesData.filter(i => e.target.value === i.country));
+  };
 
   return (
     <Container fluid>
@@ -41,43 +32,55 @@ function App() {
           <Form>
             <Form.Group controlId="exampleForm.ControlSelect1">
               <Form.Label>Choose country</Form.Label>
-              <Form.Control as="select">
+              <Form.Control onChange={handleChange} as="select">
+                <option>All country</option>
                 {countriesData.map((el) => {
-                  let country = el.countryInfo._id ? <option key={el.countryInfo._id}>{el.country}</option> : null
-                  return country
+                  let country = el.countryInfo._id ? (
+                    <option key={el.countryInfo._id}>{el.country}</option>
+                  ) : null;
+                  return country;
                 })}
               </Form.Control>
             </Form.Group>
           </Form>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Worldometers</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              { allDataKeys.map((el, i) => {
-                  if (el === "updated") {
-                    var qwerty = formatDistanceToNow(new Date(allData[el]), {
-                      addSuffix: true,
-                    });
-                  }
-                  return (
-                    <tr key={i}>
-                      <td>{el}</td>
-                      <td>{qwerty ? qwerty : allData[el]}</td>
+      { activeCountry.length > 0 && (
+        <Row>
+          <Col>
+            <Card className="text-center" style={{ width: "18rem" }}>
+              <Card.Img variant="top" src={activeCountry[0].countryInfo.flag} />
+              <Card.Body>
+                <Card.Title>
+                  {activeCountry[0].country} - {activeCountry[0].continent}
+                </Card.Title>
+                <Table size="sm" striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Cases</th>
+                      <th>Deaths</th>
+                      <th>Recovered</th>
                     </tr>
-                  );
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{activeCountry[0].cases}</td>
+                      <td>{activeCountry[0].deaths}</td>
+                      <td>{activeCountry[0].recovered}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Card.Body>
+              <Card.Footer className="text-muted">
+                Updated{" "}
+                {formatDistanceToNow(activeCountry[0].updated, {
+                  addSuffix: true,
                 })}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 }
