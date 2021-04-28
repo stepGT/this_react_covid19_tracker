@@ -26,7 +26,7 @@ function App() {
   };
 
   return (
-    <Container fluid>
+    <Container>
       <Row>
         <Col>
           <Form>
@@ -48,12 +48,15 @@ function App() {
       { activeCountry.length > 0 && (
         <Row>
           <Col>
-            <Card className="text-center" style={{ width: "18rem" }}>
-              <Card.Img variant="top" src={activeCountry[0].countryInfo.flag} />
-              <Card.Body>
+            <Card className="text-center">
+              <Card.Header>
                 <Card.Title>
                   {activeCountry[0].country} - {activeCountry[0].continent}
                 </Card.Title>
+              </Card.Header>
+              <Card.Img src={activeCountry[0].countryInfo.flag} />
+              <Card.Body>
+                <Card.Title>General information</Card.Title>
                 <Table size="sm" striped bordered hover>
                   <thead>
                     <tr>
@@ -67,6 +70,23 @@ function App() {
                       <td>{activeCountry[0].cases}</td>
                       <td>{activeCountry[0].deaths}</td>
                       <td>{activeCountry[0].recovered}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+                <Card.Title>Today information</Card.Title>
+                <Table size="sm" striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Cases</th>
+                      <th>Deaths</th>
+                      <th>Recovered</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{activeCountry[0].todayCases}</td>
+                      <td>{activeCountry[0].todayDeaths}</td>
+                      <td>{activeCountry[0].todayRecovered}</td>
                     </tr>
                   </tbody>
                 </Table>
