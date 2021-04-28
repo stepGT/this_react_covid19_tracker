@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import Table from "react-bootstrap/Table";
-import Form from "react-bootstrap/Form";
-import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { Container, Row, Col, Table, Form, Card, Tabs, Tab } from "react-bootstrap";
 import "./App.css";
 
 // Get COVID-19 totals for all countries
@@ -56,40 +51,66 @@ function App() {
               </Card.Header>
               <Card.Img src={activeCountry[0].countryInfo.flag} />
               <Card.Body>
-                <Card.Title>General information</Card.Title>
-                <Table size="sm" striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Cases</th>
-                      <th>Deaths</th>
-                      <th>Recovered</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{activeCountry[0].cases}</td>
-                      <td>{activeCountry[0].deaths}</td>
-                      <td>{activeCountry[0].recovered}</td>
-                    </tr>
-                  </tbody>
-                </Table>
-                <Card.Title>Today information</Card.Title>
-                <Table size="sm" striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Cases</th>
-                      <th>Deaths</th>
-                      <th>Recovered</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{activeCountry[0].todayCases}</td>
-                      <td>{activeCountry[0].todayDeaths}</td>
-                      <td>{activeCountry[0].todayRecovered}</td>
-                    </tr>
-                  </tbody>
-                </Table>
+                <Tabs
+                  style={{ margin: "auto" }}
+                  defaultActiveKey="general"
+                  id="uncontrolled-tab-example"
+                >
+                  <Tab eventKey="general" title="General information">
+                    <Table className="mt-1" striped hover>
+                      <thead>
+                        <tr>
+                          <th>Cases</th>
+                          <th>Deaths</th>
+                          <th>Recovered</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{activeCountry[0].cases}</td>
+                          <td>{activeCountry[0].deaths}</td>
+                          <td>{activeCountry[0].recovered}</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Tab>
+                  <Tab eventKey="today" title="Today information">
+                    <Table className="mt-1" striped hover>
+                      <thead>
+                        <tr>
+                          <th>Cases</th>
+                          <th>Deaths</th>
+                          <th>Recovered</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{activeCountry[0].todayCases}</td>
+                          <td>{activeCountry[0].todayDeaths}</td>
+                          <td>{activeCountry[0].todayRecovered}</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Tab>
+                  <Tab eventKey="perOneMillion" title="Per One Million">
+                    <Table className="mt-1" striped hover>
+                      <thead>
+                        <tr>
+                          <th>Cases</th>
+                          <th>Deaths</th>
+                          <th>Recovered</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{activeCountry[0].casesPerOneMillion}</td>
+                          <td>{activeCountry[0].deathsPerOneMillion}</td>
+                          <td>{activeCountry[0].recoveredPerOneMillion}</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Tab>
+                </Tabs>
               </Card.Body>
               <Card.Footer className="text-muted">
                 Updated{" "}
