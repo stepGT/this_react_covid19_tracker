@@ -126,10 +126,10 @@ function App() {
               <Listbox value={countriesData} onChange={handleChange}>
                 {({ open }) => (
                   <>
-                    <Listbox.Label className="block text-sm font-medium text-gray-700">
-                      Assigned to
+                    <Listbox.Label className="block text-center mx-auto w-1/2 text-xl font-medium text-gray-700">
+                      Choose country
                     </Listbox.Label>
-                    <div className="mt-1 relative">
+                    <div className="mx-auto w-1/2 mt-1 relative">
                       <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <span className="flex items-center">
                           <img
@@ -160,7 +160,7 @@ function App() {
                           static
                           className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                         >
-                          {countriesData.map((person, ind) => (
+                          {countriesData.map((country, ind) => (
                             <Listbox.Option
                               key={ind}
                               className={({ active }) =>
@@ -171,13 +171,13 @@ function App() {
                                   "cursor-default select-none relative py-2 pl-3 pr-9"
                                 )
                               }
-                              value={person}
+                              value={country}
                             >
                               {({ selected, active }) => (
                                 <>
                                   <div className="flex items-center">
                                     <img
-                                      src={person.countryInfo.flag}
+                                      src={country.countryInfo.flag}
                                       alt=""
                                       className="flex-shrink-0 h-6 w-6 rounded-full"
                                     />
@@ -189,7 +189,7 @@ function App() {
                                         "ml-3 block truncate"
                                       )}
                                     >
-                                      {person.country}
+                                      {country.country}
                                     </span>
                                   </div>
 
