@@ -1,12 +1,76 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Disclosure } from "@headlessui/react";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import "./App.css";
 
-const navigation = ["Dashboard", "Team", "Projects", "Calendar", "Reports"];
-const profile = ["Your Profile", "Settings", "Sign out"];
+const navigation = ["cases", "deaths", "recovered"];
+
+const people = [
+  {
+    id: 1,
+    name: "Wade Cooper",
+    avatar:
+      "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 2,
+    name: "Arlene Mccoy",
+    avatar:
+      "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 3,
+    name: "Devon Webb",
+    avatar:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
+  },
+  {
+    id: 4,
+    name: "Tom Cook",
+    avatar:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 5,
+    name: "Tanya Fox",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 6,
+    name: "Hellen Schmidt",
+    avatar:
+      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 7,
+    name: "Caroline Schultz",
+    avatar:
+      "https://images.unsplash.com/photo-1568409938619-12e139227838?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 8,
+    name: "Mason Heaney",
+    avatar:
+      "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 9,
+    name: "Claudie Smitham",
+    avatar:
+      "https://images.unsplash.com/photo-1584486520270-19eca1efcce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    id: 10,
+    name: "Emil Schaefer",
+    avatar:
+      "https://images.unsplash.com/photo-1561505457-3bcad021f8ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -19,6 +83,7 @@ const APICovid19Countries = "https://disease.sh/v3/covid-19/countries";
 function App() {
   const [countriesData, setCountriesData] = useState([]);
   const [activeCountry, setActiveCountry] = useState([]);
+  const [selected, setSelected] = useState(people[3]);
 
   useEffect(() => {
     axios.get(APICovid19Countries).then(res => setCountriesData(res.data));
@@ -39,7 +104,7 @@ function App() {
                   <div className="flex-shrink-0">
                     <img
                       className="h-8 w-8"
-                      src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                      src="https://www.un.org/sites/un2.un.org/files/covid-19.svg"
                       alt="Workflow"
                     />
                   </div>
@@ -69,63 +134,7 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <div className="hidden md:block">
-                  <div className="ml-4 flex items-center md:ml-6">
-                    <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
 
-                    {/* Profile dropdown */}
-                    <Menu as="div" className="ml-3 relative">
-                      {({ open }) => (
-                        <>
-                          <div>
-                            <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                              <span className="sr-only">Open user menu</span>
-                              <img
-                                className="h-8 w-8 rounded-full"
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                alt=""
-                              />
-                            </Menu.Button>
-                          </div>
-                          <Transition
-                            show={open}
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                          >
-                            <Menu.Items
-                              static
-                              className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                            >
-                              {profile.map((item) => (
-                                <Menu.Item key={item}>
-                                  {({ active }) => (
-                                    <a
-                                      href="/"
-                                      className={classNames(
-                                        active ? "bg-gray-100" : "",
-                                        "block px-4 py-2 text-sm text-gray-700"
-                                      )}
-                                    >
-                                      {item}
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                              ))}
-                            </Menu.Items>
-                          </Transition>
-                        </>
-                      )}
-                    </Menu>
-                  </div>
-                </div>
                 <div className="-mr-2 flex md:hidden">
                   {/* Mobile menu button */}
                   <Disclosure.Button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
@@ -139,7 +148,6 @@ function App() {
                 </div>
               </div>
             </div>
-
             <Disclosure.Panel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {navigation.map((item, itemIdx) =>
@@ -164,40 +172,6 @@ function App() {
                   )
                 )}
               </div>
-              <div className="pt-4 pb-3 border-t border-gray-700">
-                <div className="flex items-center px-5">
-                  <div className="flex-shrink-0">
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <div className="text-base font-medium leading-none text-white">
-                      Tom Cook
-                    </div>
-                    <div className="text-sm font-medium leading-none text-gray-400">
-                      tom@example.com
-                    </div>
-                  </div>
-                  <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-                <div className="mt-3 px-2 space-y-1">
-                  {profile.map((item) => (
-                    <a
-                      key={item}
-                      href="/"
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
-                    >
-                      {item}
-                    </a>
-                  ))}
-                </div>
-              </div>
             </Disclosure.Panel>
           </>
         )}
@@ -213,6 +187,99 @@ function App() {
           {/* Replace with your content */}
           <div className="px-4 py-6 sm:px-0">
             <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+            <Listbox value={selected} onChange={setSelected}>
+              {({ open }) => (
+                <>
+                  <Listbox.Label className="block text-sm font-medium text-gray-700">
+                    Assigned to
+                  </Listbox.Label>
+                  <div className="mt-1 relative">
+                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <span className="flex items-center">
+                        <img
+                          src={selected.avatar}
+                          alt=""
+                          className="flex-shrink-0 h-6 w-6 rounded-full"
+                        />
+                        <span className="ml-3 block truncate">
+                          {selected.name}
+                        </span>
+                      </span>
+                      <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        <SelectorIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Listbox.Button>
+
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options
+                        static
+                        className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                      >
+                        {people.map((person) => (
+                          <Listbox.Option
+                            key={person.id}
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? "text-white bg-indigo-600"
+                                  : "text-gray-900",
+                                "cursor-default select-none relative py-2 pl-3 pr-9"
+                              )
+                            }
+                            value={person}
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                <div className="flex items-center">
+                                  <img
+                                    src={person.avatar}
+                                    alt=""
+                                    className="flex-shrink-0 h-6 w-6 rounded-full"
+                                  />
+                                  <span
+                                    className={classNames(
+                                      selected
+                                        ? "font-semibold"
+                                        : "font-normal",
+                                      "ml-3 block truncate"
+                                    )}
+                                  >
+                                    {person.name}
+                                  </span>
+                                </div>
+
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? "text-white" : "text-indigo-600",
+                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                    )}
+                                  >
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </>
+              )}
+            </Listbox>
           </div>
           {/* /End replace */}
         </div>
