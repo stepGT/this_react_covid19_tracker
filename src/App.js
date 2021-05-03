@@ -27,7 +27,7 @@ function App() {
   }, []);
 
   const handleChange = e => {
-    setActiveCountry(countriesData.filter(i => e.target.value === i.country));
+    setActiveCountry(countriesData.filter(i => e.country === i.country));
   };
 
   return (
@@ -133,12 +133,12 @@ function App() {
                       <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <span className="flex items-center">
                           <img
-                            src={noImageIcon}
+                            src={ activeCountry.length !== 0 ? activeCountry[0].countryInfo.flag : noImageIcon }
                             alt=""
                             className="flex-shrink-0 h-6 w-6 rounded-full"
                           />
                           <span className="ml-3 block truncate">
-                            {" Choose country "}
+                            { activeCountry.length !== 0 ? activeCountry[0].country : 'Choose country' }
                           </span>
                         </span>
                         <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
